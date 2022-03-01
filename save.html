@@ -12,7 +12,7 @@
 	</script>  
 
 	<meta http-equiv=Content-Security-Policy 
-    content="default-src 'self'; script-src 'self' 'unsafe-inline'; img-src 'self' https://*; base-uri 'self'; frame-ancestors 'none';" />
+    content="default-src 'self'; script-src 'self' https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js https://code.jquery.com/jquery-3.4.1.min.js 'unsafe-inline'; img-src 'self' http://i.imgur.com/2cOaJ.png; base-uri 'self'; frame-ancestors 'none';" />
 </head>
 
 <body>
@@ -37,7 +37,7 @@
                     </div>
                     <div class="form-group">
                     	<br>
-                        <label for="model" style='bold'><strong>Model</strong></label>
+                        <label for="model"><strong>Model</strong></label>
                         <textarea class="form-control about" name="model" id="model" rows="3" >{{ model }}</textarea>
                         <div class="mb-3">
 						    <input class="form-control" type="file" id="inputmodel" accept=".txt"><br>
@@ -92,10 +92,10 @@
 		var area=document.getElementById('output');
 
 
-		$(document).ready(function add_field() {
+		function add_field() {
 		    var max_fields      = 5; //maximum input boxes allowed
-		    var wrpper         = $("model"); //Fields wrapper
-		    var add_button      = $(".add_field_button"); //Add button ID
+		    var wrpper         = document.getElementById('model'); //Fields wrapper
+		    var add_button      = document.getElementById("add_field"); //Add button ID
 		    console.log('2')
 		    var x = 1; //initlal text box count
 		    $(add_button).click(function(){ //on add input button click
@@ -103,12 +103,14 @@
 		            x++; //text box increment
 		            $(wrapper).append('<div class="form-group"><label for="model" style="bold"><strong>Model</strong></label><textarea class="form-control about" name="model" id="model" rows="3" >{{ model }}</textarea></div>');
 		    }
-		    });
-		});
+		    })
+		}
 		document.getElementById("add_field").addEventListener("click", add_field);
 
-		function append() {
 
+		function append(e) {
+			e.preventDefault();
+			console.log('2')
 			input1.innerHTML = {{ model }}
 			input2.innerHTML = {{ prop }}
 			area.innerHTML = {{ result }}
