@@ -6,13 +6,19 @@
 	<link href="css/jquery-linedtextarea.css" rel="stylesheet">
 	<link href="{{ url_for('static', filename='styles/mainpage.css') }}" rel="stylesheet" />
 
+	<script src="js/jquery-linedtextarea.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="{{ url_for('static', filename='styles/javascript.js') }}"/></script>
+
 	<script type = "text/javascript">  
 	function myfunction() {   
 	alert("how are you");} 
 	</script>  
 
-	<meta http-equiv=Content-Security-Policy 
-    content="default-src 'self'; script-src 'self' https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js https://code.jquery.com/jquery-3.4.1.min.js 'unsafe-inline'; img-src 'self' http://i.imgur.com/2cOaJ.png; base-uri 'self'; frame-ancestors 'none';" />
+	<!--<meta http-equiv=Content-Security-Policy 
+    content="default-src 'self'; script-src 'self' https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js https://code.jquery.com/jquery-3.4.1.min.js 'unsafe-inline'; img-src 'self' http://i.imgur.com/2cOaJ.png; base-uri 'self'; frame-ancestors 'none';" />-->
 </head>
 
 <body>
@@ -24,39 +30,43 @@
 				<br> 
 			</div>
 		</div>     
-    	<form action="{{ url_for('stick') }}" method="POST">
-        	<div class="row">
-                <div class="col-md-6">                             
-                    <div class="form-group">
-                    	<br>
-                        <label for="property"><strong>Property</strong></label>
-                        <textarea class="form-control about" name="prop" id="property" rows="3">{{ prop }}</textarea>
-                        <div class="mb-3">
+    	<div class="row">
+            <div class="col-md-6"> 
+            	<form action="{{ url_for('prop-to-text') }}" method="POST">                            
+	                <div class="form-group">
+	                	<br>
+	                    <label for="property"><strong>Property</strong></label>
+	                    <textarea class="form-control about" name="prop" id="property" rows="3">{{ prop|tojson }}</textarea>
+	                    <div class="mb-3">
 						    <input class="form-control" type="file" id="inputprop" accept=".txt">
 						</div>
-                    </div>
-                    <div class="form-group">
-                    	<br>
-                        <label for="model"><strong>Model</strong></label>
-                        <textarea class="form-control about" name="model" id="model" rows="3" >{{ model }}</textarea>
-                        <div class="mb-3">
+	                </div>
+                </form>
+                <form action="{{ url_for('model-to-text') }}" method="POST">
+	                <div class="form-group">
+	                	<br>
+	                    <label for="model"><strong>Model</strong></label>
+	                    <textarea class="form-control about" name="model" id="model" rows="3" >{{ model|tojson }}</textarea>
+	                    <div class="mb-3">
 						    <input class="form-control" type="file" id="inputmodel" accept=".txt"><br>
 						    <button class="add_field_button" name="add_field" id="add_field" onclick="add_field()">Add Model</button>
 						</div>				
-                    </div>      
-                    <p>Click the following button to see the function in action</p>  
-					<input type = "button" onclick = "myfunction()" value = "Display">
-                      
-                </div>
+	                </div>
+                </form>      
+                <p>Click the following button to see the function in action</p>  
+				<input type = "button" onclick = "myfunction()" value = "Display">
+            </div>
+            <form action="{{ url_for('mp-to-text') }}" method="POST">
 	            <div class="col-md-6">                            
 	                <div class="form-group">
 	                	<br>
 						<label for="output"><strong>Output</strong></label>
-	                    <textarea class="form-control about" id="output" rows="12" readonly>{{ result }}</textarea>                
+	                    <textarea class="form-control about" id="output" rows="12" readonly>{{ result|tojson }}</textarea>                
 	                    <br>
 	                </div>                            
 	            </div>
-            </div>			
+            </div>
+            </form>			
 	        <div class="row">					
 	            <div class="col-md-18 text-center">    	
 					<p align='right'> 
@@ -68,7 +78,6 @@
 					</p>
 				</div>
 	        </div>
-	    </form>
         <div class="row">					
             <div class="col-md-18 text-center ">    	
 				<p align='right'> 
@@ -80,13 +89,8 @@
 			</div>
 		</div>
    </div> 
-   <script src="js/jquery-linedtextarea.js"></script>
-   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-   <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-   <!--<link href="{{ url_for('static', filename='styles/javascript.js') }}"/>-->
 
-   <script>
+   <!--<script>
 		var input=document.getElementById('model');
 		var input2=document.getElementById('property');
 		var area=document.getElementById('output');
@@ -106,7 +110,6 @@
 		    })
 		}
 		document.getElementById("add_field").addEventListener("click", add_field);
-
 
 		function append(e) {
 			e.preventDefault();
@@ -203,10 +206,8 @@
 		      
 		    fr.readAsText(this.files[0]);
 		})
-	</script>
+	</script>-->
 
 
 </body>
-
-  
 </html>
